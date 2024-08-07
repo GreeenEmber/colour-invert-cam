@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera Invert Colors</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: black;
+        }
+        video {
+            width: 100%;
+            height: auto;
+            filter: invert(1);
+        }
+    </style>
+</head>
+<body>
+    <video id="video" autoplay playsinline></video>
+    <script>
+        async function startCamera() {
+            const video = document.getElementById('video');
+            try {
+                const constraints = {
+                    video: {
+                        facingMode: { exact: "environment" }
+                    }
+                };
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = stream;
+            } catch (err) {
+                // Fallback for browsers that do not support the 'exact' keyword
+                try {
+                    const constraints = {
+                        video: {
+                            facingMode: "environment"
+                        }
+                    };
+                    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                    video.srcObject = stream;
+                } catch (err) {
+                    console.error('Error accessing the camera: ', err);
+                }
+            }
+        }
+
+        startCamera();
+    </script>
+</body>
+</html>
